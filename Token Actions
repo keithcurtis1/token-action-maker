@@ -1,8 +1,8 @@
 var tokenAction = tokenAction || (function() {
     'use strict';
 
-    var version = '0.2.5',
-        sheetVersion = '5th Edition OGL by Roll20 2.0',
+    var version = '0.2.6',
+        sheetVersion = 'D&D 5th Edition by Roll20',
         
     checkInstall = function() {
         log('TokenAction v'+version+' is ready!  Designed for use with the '+sheetVersion+' character sheet!');
