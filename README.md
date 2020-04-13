@@ -18,4 +18,5 @@ You can create specific classes of abilities by using the following arguments se
 
 Examples:
 **!ta saves checks** will create token ability buttons for Ability Checks and Saving Throws.
-**!ta nam** will create alltoken ability buttons and identify them by name, rather than character_id..
+
+**!ta name** will create alltoken ability buttons and identify them by name, rather than character_id..
