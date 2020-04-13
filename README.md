@@ -1,5 +1,7 @@
 *Created by Kevin,*
+
 *modified by keithcurtis*
+
 This script creates token actions on selected tokens for the D&D 5e by Roll20 sheet. Tokens must represent character sheets, either PC or NPC.
 
 **!ta** This command will create a full suite of token action buttons for a selected character. Actions for NPCs and Attacks for PCs.
