@@ -1,7 +1,7 @@
 var tokenAction = tokenAction || (function () {
     'use strict';
 
-    var version = '0.2.8',
+    var version = '0.2.9',
         sheetVersion = 'D&D 5th Edition by Roll20',
 
         checkInstall = function () {
@@ -11,6 +11,16 @@ var tokenAction = tokenAction || (function () {
         getRepeatingAction = (id, action, usename) => {
             const name = usename ? getObj('character', id).get('name') : id;
             return `%{${name}|${action}}`;
+        },
+        
+        getRepeatingTrait = (id, trait, usename) => {
+            const name = usename ? getObj('character', id).get('name') : id;
+            return `%{${name}|${trait}}`;
+        },
+        
+        getRepeatingReaction = (id, reaction, usename) => {
+            const name = usename ? getObj('character', id).get('name') : id;
+            return `%{${name}|${reaction}}`;
         },
 
         getSelectedCharacters = function (selected) {
@@ -221,7 +231,7 @@ var tokenAction = tokenAction || (function () {
 
         handleInput = function (msg) {
             var char;
-            var keywords = ['attacks', 'spells', 'abilities', 'saves', 'initiative'];
+            var keywords = ['attacks', 'spells', 'abilities', 'saves', 'checks', 'traits', 'reactions', 'initiative'];
             if (!(msg.type === 'api' && msg.selected && (msg.content.search(/^!ta\b/) || msg.content.search(/^!deleteta\b/) || msg.content.search(/^!sortta\b/)))) return;
 
             var args = msg.content.split(" ");
@@ -231,17 +241,16 @@ var tokenAction = tokenAction || (function () {
                 char = _.uniq(getSelectedCharacters(msg.selected));
 
                 if (args.length === 1) {
-                    args = ['!ta', 'attacks', 'spells', 'checks', 'saves', 'init'];
+                    args = ['!ta', 'attacks', 'spells', 'checks', 'saves', 'traits', 'reactions', 'init'];
                 }
                 if (args.length === 2 && args.includes('name')) {
-                    args = ['!ta', 'name','attacks', 'spells', 'checks', 'saves', 'init'];
+                    args = ['!ta', 'name','attacks', 'spells', 'checks', 'saves', 'traits', 'reactions', 'init'];
                 }
                 
                 if (args.includes("help")) {
                     let header = "<div style='width: 100%; color: #000; border: 1px solid #000; background-color: #fff; box-shadow: 0 0 3px #000; width: 90%; display: block; text-align: left; font-size: 13px; padding: 5px; margin-bottom: 0.25em; font-family: sans-serif; white-space: pre-wrap;'>";
-                    let helpText = "<b>Token Action Creator</b> <i>v." + version + "</i><br><i>Created by Kevin,<br>Modified by keithcurtis and GiGs</i><br>This script creates token actions on selected tokens for the D&D 5e by Roll20 sheet. Tokens must represent character sheets, either PC or NPC.<br><br><b>!ta</b> This command will create a full suite of token abilities.<br><br>You can create specific classes of abilities by using the following arguments separated by spaces:<br><ul><li><b>attacks</b> Creates a button for each attack. In the case of NPCs, this includes all Actions.<br><li><b>spells</b>Creates a button that calls up a chat menu of all spells the character can cast.<br><li><b>checks</b> Creates a drop down menu of all Ability and Skill (Ability) checks<br><li><b>saves</b> Creates a dropdown menu of all saving throws<br><li><b>init</b> Creates a button that rolls initiative for the selected token<br><li><b>help</b> Calls up this help documentation</ul><br>Example:<br><b>!ta saves checks</b> will create token ability buttons for Ability Checks and Saving Throws.";
-                    let footer = '</div>';
-                    sendChat("TokenAction", "/w " + msg.who + header + helpText + footer);
+                    let helpText = "<b>Token Action Creator</b> <i>v." + version + "</i><br><i>Created by Kevin,<br>Modified by keithcurtis</i><br>This script creates token actions on selected tokens for the D&D 5e by Roll20 sheet. Tokens must represent character sheets, either PC or NPC.<br><br><b>!ta</b> This command will create a full suite of token abilities.<br><b>!deleteta</b> will delete ALL token actions for the selected character, whether they were created by this script or not. Use with caution.<br><br>You can create specific classes of abilities by using the following arguments separated by spaces:<ul><li><b>attacks</b> Creates a button for each attack. In the case of NPCs, this includes all Actions.<br><li><b>traits</b> Creates a button for each trait. PCs can have quite a number of these, so it is not recommended to run this command on PCs.<br><li><b>reactions</b> Creates a button for each reaction. This will be ignored on PCs since only NPC sheets have a repeating attribute for reactions.<br><li><b>spells</b>Creates a button that calls up a chat menu of all spells the character can cast.<br><li><b>checks</b> Creates a drop down menu of all Ability and Skill (Ability) checks<br><li><b>saves</b> Creates a dropdown menu of all saving throws<br><li><b>init</b> Creates a button that rolls initiative for the selected token<br><li><b>help</b> Calls up this help documentation</ul><br>Example:<br><b>!ta saves checks</b> will create token ability buttons for Ability Checks and Saving Throws.";
+                    let footer = '</div>';                    sendChat("TokenAction", "/w " + msg.who + header + helpText + footer);
                     return;
                 }
 
@@ -262,6 +271,12 @@ var tokenAction = tokenAction || (function () {
                         if (args.includes("attacks")) {
                             createRepeating(/repeating_npcaction-l_[^_]+_name\b/, 'repeating_npcaction-l_%%RID%%_npc_action', a.id, usename);
                         }
+                        if (args.includes("traits")) {
+                            createRepeating(/repeating_npctrait_[^_]+_name\b/, 'repeating_npctrait_%%RID%%_-npc_roll_output', a.id, usename);
+                        }
+                        if (args.includes("reactions")) {
+                            createRepeating(/repeating_npcreaction_[^_]+_name\b/, 'repeating_npcreaction_%%RID%%_-npc_roll_output', a.id, usename);
+                        }
                         if (args.includes("spells")) {
                             createSpell(a.id);
                         }
@@ -277,6 +292,9 @@ var tokenAction = tokenAction || (function () {
                         }
                         if (args.includes("attacks")) {
                             createRepeating(/repeating_attack_[^_]+_atkname\b/, 'repeating_attack_%%RID%%_attack', a.id, usename);
+                        }
+                        if (args.includes("traits")) {
+                            createRepeating(/repeating_traits_[^_]+_name\b/, 'repeating_traits_%%RID%%_output', a.id, usename);
                         }
                         if (args.includes("spells")) {
                             createSpell(a.id);
