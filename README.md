@@ -5,10 +5,13 @@
 This script creates token actions on selected tokens for the D&D 5e by Roll20 sheet. Tokens must represent character sheets, either PC or NPC.
 
 **!ta** This command will create a full suite of token action buttons for a selected character. Actions for NPCs and Attacks for PCs.
+
 **!deleteta** will delete ALL token actions for the selected character, whether they were created by this script or not. Use with caution.
 
 You can create specific classes of abilities by using the following arguments separated by spaces:
 - **attacks** Creates a button for each attack. In the case of NPCs, this includes all Actions.
+- **trait**s Creates a button for each trait. PCs can have quite a number of these, so it is not recommended to run this command on PCs.
+- **reactions** Creates a button for each reaction. This will be ignored on PCs since only NPC sheets have a repeating attribute for reactions.
 - **spells** Creates a button that calls up a chat menu of all spells the character can cast.
 - **checks** Creates a drop down menu of all Ability and Skill (Ability) checks
 - **saves** Creates a dropdown menu of all saving throws
