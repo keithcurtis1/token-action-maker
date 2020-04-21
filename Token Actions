@@ -1,7 +1,7 @@
 var tokenAction = tokenAction || (function () {
     'use strict';
 
-    var version = '0.2.9',
+    var version = '0.2.8',
         sheetVersion = 'D&D 5th Edition by Roll20',
 
         checkInstall = function () {
@@ -239,7 +239,13 @@ var tokenAction = tokenAction || (function () {
 
             if (msg.content.search(/^!ta\b/) !== -1) {
                 char = _.uniq(getSelectedCharacters(msg.selected));
-
+                
+                if (args.includes('pc')) {
+                    args = ['!ta', 'attacks', 'spells', 'checks', 'saves', 'reactions', 'init'];
+                }
+                if (args.includes('pc') && args.includes('name')) {
+                    args = ['!ta', 'name','attacks', 'spells', 'checks', 'saves', 'reactions', 'init'];
+                }
                 if (args.length === 1) {
                     args = ['!ta', 'attacks', 'spells', 'checks', 'saves', 'traits', 'reactions', 'init'];
                 }
