@@ -2,11 +2,14 @@
 
 *modified by keithcurtis & Gigs*
 
-This script creates token actions on selected tokens for the D&D 5e by Roll20 sheet. Tokens must represent character sheets, either PC or NPC.
+This script creates token actions on selected tokens for the D&D 5e by Roll20 sheet. Tokens must represent character sheets, either PC or NPC. As of 0.2.9, the script will also abbreviate common phrases like "(One Handed)" to "-1H"
 
 **!ta** This command will create a full suite of token action buttons for a selected character. Actions for NPCs and Attacks for PCs.
 
+**!sortta** This command functions identically to !ta, but will prepend "a-" to NPC actions, and "la-" to NPC Legendary Actions
+
 **!deleteta** will delete ALL token actions for the selected character, whether they were created by this script or not. Use with caution.
+
 
 You can create specific classes of abilities by using the following arguments separated by spaces:
 - **attacks** Creates a button for each attack. In the case of NPCs, this includes all Actions.
