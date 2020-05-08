@@ -242,7 +242,7 @@ var tokenAction = tokenAction || (function() {
 
         handleInput = function(msg) {
             var char;
-            var keywords = ['attacks', 'spells', 'abilities', 'saves', 'checks', 'traits', 'reactions', 'initiative'];
+            var keywords = ['attacks', 'spells', 'abilities', 'saves', 'checks', 'traits', 'reactions', 'init'];
             if (!(msg.type === 'api' && msg.selected && (msg.content.search(/^!ta\b/) || msg.content.search(/^!deleteta\b/) || msg.content.search(/^!sortta\b/)))) return;
 
             var args = msg.content.split(" ");
